@@ -1,0 +1,30 @@
+{
+  "name": "FotoSEO",
+  "short_name": "FotoSEO",
+  "description": "Sube fotos y hazlas aparecer en Google Imágenes",
+  "start_url": "/fotoseo/app/",
+  "scope": "/fotoseo/app/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f8f9fb",
+  "theme_color": "#2563eb",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "/fotoseo/app/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/fotoseo/app/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "productivity",
+    "photo"
+  ]
+}
