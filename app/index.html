@@ -1368,7 +1368,7 @@ function generatePhotoPage(photo, imageUrl, pageUrl, siteUrl) {
 <meta name="twitter:description" content="${escHtml(photo.desc || photo.title)}">
 <meta name="twitter:image" content="${imageUrl}">
 ${photo.tags.length ? `<meta name="keywords" content="${escHtml(photo.tags.join(', '))}">` : ''}
-<script type="application/ld+json">${JSON.stringify(schemaObj, null, 2)}</script>
+<script type="application/ld+json">${JSON.stringify(schemaObj, null, 2)}<\/script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,-apple-system,sans-serif;background:#fff;color:#111;line-height:1.6}
