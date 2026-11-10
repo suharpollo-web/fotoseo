@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://suharpollo-web.github.io/fotoseo/sitemap.xml
