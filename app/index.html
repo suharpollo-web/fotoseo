@@ -1,0 +1,1930 @@
+<title>FotoSEO</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#2563eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FotoSEO">
+<link rel="apple-touch-icon" href="/fotoseo/app/icons/icon-192.png">
+<link rel="manifest" href="/fotoseo/app/manifest.json">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<style>
+:root {
+  --bg: #f8f9fb;
+  --bg2: #ffffff;
+  --bg3: #f0f2f7;
+  --border: #e2e6f0;
+  --fg: #111827;
+  --fg2: #374151;
+  --fg3: #6b7280;
+  --accent: #2563eb;
+  --accent-bg: #eff6ff;
+  --accent-hover: #1d4ed8;
+  --success: #059669;
+  --success-bg: #ecfdf5;
+  --warning: #d97706;
+  --warning-bg: #fffbeb;
+  --error: #dc2626;
+  --error-bg: #fef2f2;
+  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,.08), 0 2px 4px -1px rgba(0,0,0,.04);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1117;
+    --bg2: #1a1d27;
+    --bg3: #252836;
+    --border: #2e3347;
+    --fg: #f1f5f9;
+    --fg2: #cbd5e1;
+    --fg3: #64748b;
+    --accent: #3b82f6;
+    --accent-bg: #172554;
+    --accent-hover: #60a5fa;
+    --success: #10b981;
+    --success-bg: #064e3b;
+    --warning: #f59e0b;
+    --warning-bg: #451a03;
+    --error: #ef4444;
+    --error-bg: #450a0a;
+    --shadow: 0 1px 3px rgba(0,0,0,.3), 0 1px 2px rgba(0,0,0,.2);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,.3), 0 2px 4px -1px rgba(0,0,0,.2);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1117;
+  --bg2: #1a1d27;
+  --bg3: #252836;
+  --border: #2e3347;
+  --fg: #f1f5f9;
+  --fg2: #cbd5e1;
+  --fg3: #64748b;
+  --accent: #3b82f6;
+  --accent-bg: #172554;
+  --accent-hover: #60a5fa;
+  --success: #10b981;
+  --success-bg: #064e3b;
+  --warning: #f59e0b;
+  --warning-bg: #451a03;
+  --error: #ef4444;
+  --error-bg: #450a0a;
+  --shadow: 0 1px 3px rgba(0,0,0,.3), 0 1px 2px rgba(0,0,0,.2);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,.3), 0 2px 4px -1px rgba(0,0,0,.2);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100vh;
+  padding-left: max(0px, env(safe-area-inset-left, 0px));
+  padding-right: max(0px, env(safe-area-inset-right, 0px));
+}
+
+h1,h2,h3,h4 { font-family: 'Space Grotesk', system-ui, sans-serif; text-wrap: balance; margin: 0; }
+
+/* Layout */
+.app { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.main { flex: 1; min-width: 0; }
+
+.sidebar-logo {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.logo-title {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo-sub { font-size: 11px; color: var(--fg3); margin-top: 2px; }
+
+.nav { padding: 12px 10px; flex: 1; }
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--fg2);
+  font-size: 14px;
+  font-weight: 500;
+  transition: background .15s, color .15s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+.nav-item:hover { background: var(--bg3); color: var(--fg); }
+.nav-item.active { background: var(--accent-bg); color: var(--accent); }
+.nav-item svg { flex-shrink: 0; }
+
+.nav-section { font-size: 11px; font-weight: 600; color: var(--fg3); letter-spacing: .08em; text-transform: uppercase; padding: 12px 12px 4px; }
+
+.sidebar-footer { padding: 12px; border-top: 1px solid var(--border); }
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--fg3);
+  padding: 6px 8px;
+}
+.toggle-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2px;
+  cursor: pointer;
+  display: flex;
+  gap: 2px;
+}
+.toggle-btn button {
+  border: none;
+  background: none;
+  padding: 4px 8px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--fg3);
+  transition: background .15s, color .15s;
+}
+.toggle-btn button.active { background: var(--bg2); color: var(--fg); box-shadow: var(--shadow); }
+
+/* Page areas */
+.page { display: none; padding: 32px; max-width: 900px; }
+.page.active { display: block; }
+.page-header { margin-bottom: 28px; }
+.page-title { font-size: 24px; font-weight: 700; }
+.page-desc { color: var(--fg3); margin-top: 4px; font-size: 14px; }
+
+/* Cards */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+.card + .card { margin-top: 16px; }
+.card-title { font-size: 15px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background .15s, transform .1s, opacity .15s;
+  font-family: inherit;
+  line-height: 1;
+}
+.btn:active { transform: scale(.98); }
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-secondary { background: var(--bg3); color: var(--fg2); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--border); }
+.btn-danger { background: var(--error-bg); color: var(--error); border: 1px solid color-mix(in srgb, var(--error) 30%, transparent); }
+.btn-sm { padding: 6px 12px; font-size: 13px; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Forms */
+.field { margin-bottom: 18px; }
+.label { display: block; font-size: 13px; font-weight: 500; color: var(--fg2); margin-bottom: 6px; }
+.label span { color: var(--fg3); font-weight: 400; }
+input[type=text], input[type=url], input[type=password], textarea, select {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color .15s;
+  outline: none;
+}
+input[type=text]:focus, input[type=url]:focus, input[type=password]:focus, textarea:focus, select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+textarea { resize: vertical; min-height: 80px; }
+.hint { font-size: 12px; color: var(--fg3); margin-top: 5px; }
+
+/* Upload area */
+.drop-zone {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 40px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  background: var(--bg);
+  position: relative;
+}
+.drop-zone:hover, .drop-zone.dragging {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+.drop-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.drop-zone-icon { font-size: 36px; margin-bottom: 10px; }
+.drop-zone-title { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+.drop-zone-sub { color: var(--fg3); font-size: 13px; }
+
+/* Image preview */
+.img-preview {
+  width: 100%;
+  max-height: 280px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+/* Badge/pill */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.badge-blue { background: var(--accent-bg); color: var(--accent); }
+.badge-green { background: var(--success-bg); color: var(--success); }
+.badge-warn { background: var(--warning-bg); color: var(--warning); }
+
+/* Gallery grid */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+.photo-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform .2s, box-shadow .2s;
+  cursor: pointer;
+}
+.photo-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.photo-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+}
+.photo-card-info { padding: 12px; }
+.photo-card-title { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.photo-card-desc { font-size: 12px; color: var(--fg3); margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.photo-card-actions { display: flex; gap: 6px; padding: 0 12px 12px; }
+
+/* Stats row */
+.stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.stat-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  box-shadow: var(--shadow);
+}
+.stat-num { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; color: var(--accent); }
+.stat-label { font-size: 12px; color: var(--fg3); margin-top: 2px; }
+
+/* Alert */
+.alert {
+  display: flex;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+.alert-info { background: var(--accent-bg); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
+.alert-success { background: var(--success-bg); color: var(--success); border: 1px solid color-mix(in srgb, var(--success) 30%, transparent); }
+.alert-warning { background: var(--warning-bg); color: var(--warning); border: 1px solid color-mix(in srgb, var(--warning) 30%, transparent); }
+.alert-error { background: var(--error-bg); color: var(--error); border: 1px solid color-mix(in srgb, var(--error) 30%, transparent); }
+
+/* Progress */
+.progress-wrap { background: var(--bg3); border-radius: 4px; height: 6px; overflow: hidden; }
+.progress-bar { height: 100%; background: var(--accent); border-radius: 4px; transition: width .4s; }
+
+/* SEO preview */
+.seo-preview {
+  font-family: Arial, sans-serif;
+  padding: 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  max-width: 600px;
+}
+.seo-url { color: var(--success); font-size: 13px; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.seo-title { color: #1a0dab; font-size: 20px; font-weight: normal; margin-bottom: 4px; cursor: pointer; line-height: 1.3; }
+:root[data-theme="dark"] .seo-title { color: #8ab4f8; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .seo-title { color: #8ab4f8; } }
+.seo-desc { color: var(--fg2); font-size: 14px; line-height: 1.5; }
+
+/* Steps */
+.steps { display: flex; gap: 0; margin-bottom: 32px; }
+.step { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
+.step::before { content: ''; position: absolute; top: 16px; left: 50%; right: -50%; height: 2px; background: var(--border); z-index: 0; }
+.step:last-child::before { display: none; }
+.step-num {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--bg3); border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; position: relative; z-index: 1;
+  transition: background .2s, border-color .2s, color .2s;
+}
+.step.done .step-num { background: var(--success); border-color: var(--success); color: white; }
+.step.active .step-num { background: var(--accent); border-color: var(--accent); color: white; }
+.step-label { font-size: 11px; color: var(--fg3); margin-top: 6px; text-align: center; }
+
+/* Tabs */
+.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+.tab-btn {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fg3);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  margin-bottom: -1px;
+  transition: color .15s, border-color .15s;
+  font-family: inherit;
+}
+.tab-btn:hover { color: var(--fg); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Toast */
+#toast {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+  right: max(16px, env(safe-area-inset-right, 0px));
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: var(--shadow-md);
+  z-index: 999;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: transform .3s, opacity .3s;
+  max-width: 320px;
+  pointer-events: none;
+}
+#toast.show { transform: translateY(0); opacity: 1; }
+#toast.ok { background: var(--success); color: white; }
+#toast.err { background: var(--error); color: white; }
+#toast.info { background: var(--accent); color: white; }
+
+/* Modal */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+  opacity: 0; pointer-events: none; transition: opacity .2s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--bg2);
+  border-radius: 16px;
+  padding: 28px;
+  max-width: 560px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0,0,0,.2);
+  transform: scale(.95); transition: transform .2s;
+}
+.modal-overlay.open .modal { transform: scale(1); }
+.modal-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+
+/* CC badge */
+.cc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--fg2);
+  text-decoration: none;
+}
+.cc-icon { font-size: 16px; }
+
+/* Responsive */
+@media (max-width: 700px) {
+  .sidebar { display: none; }
+  .mobile-nav {
+    display: flex;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    padding: 8px 12px;
+    gap: 4px;
+    scrollbar-width: none;
+  }
+  .mobile-nav::-webkit-scrollbar { display: none; }
+  .page { padding: 20px 16px; }
+}
+@media (min-width: 701px) {
+  .mobile-nav { display: none; }
+}
+.mobile-nav-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg3);
+  font-family: inherit;
+  white-space: nowrap;
+}
+.mobile-nav-btn.active { background: var(--accent-bg); color: var(--accent); }
+
+/* Misc */
+.row { display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
+.flex-end { justify-content: flex-end; }
+.flex-between { justify-content: space-between; align-items: center; }
+.mt-4 { margin-top: 16px; }
+.mt-6 { margin-top: 24px; }
+.mt-2 { margin-top: 8px; }
+.text-sm { font-size: 13px; }
+.text-xs { font-size: 12px; }
+.text-muted { color: var(--fg3); }
+code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: var(--bg3); padding: 2px 6px; border-radius: 4px; }
+</style>
+
+<div id="toast"></div>
+<div id="pwa-banner" style="display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:12px 20px;border-radius:12px;gap:12px;align-items:center;box-shadow:0 4px 20px rgba(0,0,0,.2);z-index:200;max-width:calc(100% - 32px);width:max-content">
+  <span style="font-size:14px;font-weight:600">📲 Instalar FotoSEO en tu móvil</span>
+  <button onclick="installPwa()" style="background:#fff;color:var(--accent);border:none;border-radius:8px;padding:6px 14px;font-weight:600;cursor:pointer;font-size:13px">Instalar</button>
+  <button onclick="this.parentElement.style.display='none'" style="background:transparent;color:#fff;border:none;cursor:pointer;font-size:18px;padding:0 4px">×</button>
+</div>
+
+<!-- Modal for photo detail -->
+<div class="modal-overlay" id="photoModal">
+  <div class="modal">
+    <div class="row flex-between" style="margin-bottom:16px">
+      <div class="modal-title" id="modalTitle">Detalles</div>
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-title">📸 FotoSEO</div>
+      <div class="logo-sub">Las ideas de Suhar</div>
+    </div>
+    <nav class="nav">
+      <div class="nav-section">Principal</div>
+      <button class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Panel
+      </button>
+      <button class="nav-item" onclick="showPage('upload')" id="nav-upload">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Subir foto
+      </button>
+      <button class="nav-item" onclick="showPage('gallery')" id="nav-gallery">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Galería
+      </button>
+      <div class="nav-section">Publicar</div>
+      <button class="nav-item" onclick="showPage('deploy')" id="nav-deploy">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Publicar en web
+      </button>
+      <button class="nav-item" onclick="showPage('seo')" id="nav-seo">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        SEO & Google
+      </button>
+      <div class="nav-section">Configuración</div>
+      <button class="nav-item" onclick="showPage('config')" id="nav-config">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M20 12h2M2 12h2M12 20v2M12 2v2"/></svg>
+        Ajustes
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="theme-toggle">
+        <span>Tema</span>
+        <div class="toggle-btn">
+          <button onclick="setTheme('light')" id="theme-light">☀️</button>
+          <button onclick="setTheme('system')" id="theme-system" class="active">⚙️</button>
+          <button onclick="setTheme('dark')" id="theme-dark">🌙</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile nav -->
+  <div class="mobile-nav">
+    <button class="mobile-nav-btn active" onclick="showPage('dashboard')" id="mnav-dashboard">🏠 Panel</button>
+    <button class="mobile-nav-btn" onclick="showPage('upload')" id="mnav-upload">📤 Subir</button>
+    <button class="mobile-nav-btn" onclick="showPage('gallery')" id="mnav-gallery">🖼 Galería</button>
+    <button class="mobile-nav-btn" onclick="showPage('deploy')" id="mnav-deploy">🌐 Publicar</button>
+    <button class="mobile-nav-btn" onclick="showPage('seo')" id="mnav-seo">🔍 SEO</button>
+    <button class="mobile-nav-btn" onclick="showPage('config')" id="mnav-config">⚙️ Config</button>
+  </div>
+
+  <main class="main">
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <h1 class="page-title">Panel de control</h1>
+        <p class="page-desc">Gestiona tus fotos SEO para Las ideas de Suhar</p>
+      </div>
+      <div class="stats-row" id="statsRow"></div>
+      <div class="card">
+        <div class="card-title">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Inicio rápido
+        </div>
+        <div id="quickstart"></div>
+      </div>
+      <div class="card mt-4">
+        <div class="card-title">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Cómo funciona
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+          <div style="padding:16px;background:var(--bg3);border-radius:10px">
+            <div style="font-size:24px;margin-bottom:8px">1️⃣</div>
+            <div style="font-weight:600;font-size:14px;margin-bottom:4px">Configura GitHub Pages</div>
+            <div class="text-sm text-muted">Conecta tu repositorio en Ajustes para publicar las fotos en la web de forma gratuita.</div>
+          </div>
+          <div style="padding:16px;background:var(--bg3);border-radius:10px">
+            <div style="font-size:24px;margin-bottom:8px">2️⃣</div>
+            <div style="font-weight:600;font-size:14px;margin-bottom:4px">Sube fotos con SEO</div>
+            <div class="text-sm text-muted">Título, descripción y etiquetas. La app genera páginas optimizadas para Google Imágenes.</div>
+          </div>
+          <div style="padding:16px;background:var(--bg3);border-radius:10px">
+            <div style="font-size:24px;margin-bottom:8px">3️⃣</div>
+            <div style="font-weight:600;font-size:14px;margin-bottom:4px">Publica y envía a Google</div>
+            <div class="text-sm text-muted">Publica en GitHub Pages y envía el sitemap a Google Search Console para indexación.</div>
+          </div>
+        </div>
+      </div>
+      <div class="card mt-4" id="recentPhotosCard" style="display:none">
+        <div class="row flex-between" style="margin-bottom:16px">
+          <div class="card-title" style="margin:0">Fotos recientes</div>
+          <button class="btn btn-secondary btn-sm" onclick="showPage('gallery')">Ver todas →</button>
+        </div>
+        <div id="recentPhotosGrid" class="gallery-grid"></div>
+      </div>
+    </div>
+
+    <!-- UPLOAD -->
+    <div class="page" id="page-upload">
+      <div class="page-header">
+        <h1 class="page-title">Subir foto</h1>
+        <p class="page-desc">Añade una nueva foto optimizada para Google Imágenes</p>
+      </div>
+
+      <div id="uploadStep1">
+        <div class="card">
+          <div class="card-title">📁 Selecciona la imagen</div>
+          <div class="drop-zone" id="dropZone">
+            <input type="file" accept="image/*" id="fileInput" onchange="handleFileSelect(this)">
+            <div class="drop-zone-icon">🖼️</div>
+            <div class="drop-zone-title">Arrastra tu foto aquí</div>
+            <div class="drop-zone-sub">o haz clic para seleccionar · JPG, PNG, WEBP · máx. 20 MB</div>
+          </div>
+          <div id="imgPreviewWrap" style="display:none;margin-top:16px">
+            <img id="imgPreview" class="img-preview" alt="">
+            <div class="row" style="gap:8px">
+              <div id="imgInfo" class="text-sm text-muted"></div>
+              <button class="btn btn-secondary btn-sm" onclick="clearFile()">✕ Cambiar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="uploadStep2" style="display:none">
+        <div class="card">
+          <div class="card-title">✍️ Información SEO</div>
+          <div class="field">
+            <label class="label" for="photoTitle">Título <span>(principal para Google)</span></label>
+            <input type="text" id="photoTitle" placeholder="Ej: Volcán al atardecer en Costa Rica" oninput="updateSeoPreview()">
+            <div class="hint">Usa palabras clave que la gente buscaría.</div>
+          </div>
+          <div class="field">
+            <label class="label" for="photoDesc">Descripción <span>(aparece en resultados Google)</span></label>
+            <textarea id="photoDesc" rows="3" placeholder="Describe la imagen con detalle usando palabras clave relevantes..." oninput="updateSeoPreview()"></textarea>
+            <div class="hint" id="descHint">0 / 160 caracteres recomendados</div>
+          </div>
+          <div class="field">
+            <label class="label" for="photoAlt">Texto alternativo (alt) <span>(accesibilidad + SEO de imagen)</span></label>
+            <input type="text" id="photoAlt" placeholder="Descripción breve y literal de lo que se ve en la foto">
+          </div>
+          <div class="row" style="gap:16px">
+            <div class="field" style="flex:1;min-width:0">
+              <label class="label" for="photoTags">Etiquetas <span>(separadas por comas)</span></label>
+              <input type="text" id="photoTags" placeholder="naturaleza, volcán, costa rica">
+            </div>
+            <div class="field" style="flex:1;min-width:0">
+              <label class="label" for="photoCategory">Categoría</label>
+              <select id="photoCategory">
+                <option value="">Sin categoría</option>
+                <option>Naturaleza</option>
+                <option>Paisajes</option>
+                <option>Animales</option>
+                <option>Arquitectura</option>
+                <option>Cultura</option>
+                <option>Viajes</option>
+                <option>Arte</option>
+                <option>Ciencia</option>
+                <option>Otro</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Autoría y licencia</label>
+            <div style="padding:12px;background:var(--bg3);border-radius:8px;font-size:13px">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <span style="font-size:18px">©</span>
+                <strong>Las ideas de Suhar</strong>
+                <a class="cc-badge" href="https://creativecommons.org/licenses/by/4.0/" target="_blank">
+                  <span class="cc-icon">🌐</span> CC BY 4.0
+                </a>
+              </div>
+              <div class="text-muted" style="font-size:12px">Licencia Creative Commons — uso libre con atribución al autor.</div>
+            </div>
+          </div>
+
+          <div class="card-title" style="margin-top:16px;margin-bottom:12px">🔍 Vista previa en Google</div>
+          <div class="seo-preview" id="seoPreview">
+            <div class="seo-url" id="prevUrl">https://tusite.github.io/fotos/tu-foto/</div>
+            <div class="seo-title" id="prevTitle">Título de la foto aparecerá aquí</div>
+            <div class="seo-desc" id="prevDesc">La descripción que escribas aparecerá aquí en los resultados de búsqueda de Google...</div>
+          </div>
+
+          <div class="row mt-4">
+            <button class="btn btn-secondary" onclick="goBackToStep1()">← Cambiar imagen</button>
+            <button class="btn btn-primary" onclick="savePhoto()" id="saveBtn">
+              💾 Guardar foto
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="page" id="page-gallery">
+      <div class="page-header row flex-between">
+        <div>
+          <h1 class="page-title">Galería</h1>
+          <p class="page-desc">Todas tus fotos guardadas</p>
+        </div>
+        <button class="btn btn-primary" onclick="showPage('upload')">+ Añadir foto</button>
+      </div>
+      <div id="galleryEmpty" style="display:none">
+        <div class="card" style="text-align:center;padding:48px 24px">
+          <div style="font-size:48px;margin-bottom:16px">🖼️</div>
+          <div style="font-size:17px;font-weight:600;margin-bottom:8px">Sin fotos aún</div>
+          <div class="text-muted text-sm" style="margin-bottom:20px">Sube tu primera foto para comenzar.</div>
+          <button class="btn btn-primary" onclick="showPage('upload')">📤 Subir primera foto</button>
+        </div>
+      </div>
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+
+    <!-- DEPLOY -->
+    <div class="page" id="page-deploy">
+      <div class="page-header">
+        <h1 class="page-title">Publicar en la web</h1>
+        <p class="page-desc">Despliega tus fotos en GitHub Pages para que Google las indexe</p>
+      </div>
+
+      <div id="deployNoConfig" style="display:none">
+        <div class="alert alert-warning">
+          <span>⚠️</span>
+          <div>Configura primero los ajustes de GitHub Pages en la sección <strong>Ajustes</strong>.</div>
+        </div>
+        <button class="btn btn-primary" onclick="showPage('config')">Ir a Ajustes →</button>
+      </div>
+
+      <div id="deployMain" style="display:none">
+        <div id="deployStatus" class="alert" style="display:none"></div>
+
+        <div class="card">
+          <div class="card-title">🚀 Desplegar todas las fotos</div>
+          <p class="text-sm text-muted" style="margin-bottom:16px">
+            Esto publicará <strong id="photosCount">0</strong> foto(s) en GitHub Pages. Generará páginas HTML optimizadas para SEO, el sitemap XML para Google y el archivo robots.txt.
+          </p>
+          <div id="deployProgress" style="display:none;margin-bottom:16px">
+            <div class="text-sm" style="margin-bottom:8px" id="deployProgressText">Preparando…</div>
+            <div class="progress-wrap"><div class="progress-bar" id="deployProgressBar" style="width:0%"></div></div>
+          </div>
+          <div class="row">
+            <button class="btn btn-primary" onclick="deployAll()" id="deployBtn">
+              🌐 Publicar en GitHub Pages
+            </button>
+            <button class="btn btn-secondary" onclick="downloadZip()" id="zipBtn">
+              📦 Descargar ZIP
+            </button>
+          </div>
+        </div>
+
+        <div class="card mt-4">
+          <div class="card-title">📋 Archivos generados</div>
+          <div id="generatedFilesList" class="text-sm text-muted">Pulsa "Publicar" para ver los archivos generados.</div>
+        </div>
+
+        <div class="card mt-4" id="deployResultCard" style="display:none">
+          <div class="card-title">✅ ¡Publicado!</div>
+          <div id="deployResultContent"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO -->
+    <div class="page" id="page-seo">
+      <div class="page-header">
+        <h1 class="page-title">SEO & Google</h1>
+        <p class="page-desc">Herramientas para mejorar la visibilidad en Google Imágenes</p>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('tab-checklist')">✅ Checklist SEO</button>
+        <button class="tab-btn" onclick="showTab('tab-sitemap')">🗺️ Sitemap</button>
+        <button class="tab-btn" onclick="showTab('tab-console')">🔍 Google Search Console</button>
+      </div>
+
+      <div class="tab-content active" id="tab-checklist">
+        <div id="seoChecklist"></div>
+      </div>
+
+      <div class="tab-content" id="tab-sitemap">
+        <div class="card">
+          <div class="card-title">Sitemap de imágenes</div>
+          <p class="text-sm text-muted" style="margin-bottom:16px">El sitemap incluye la extensión especial de Google para imágenes, que es la forma más efectiva de enviar tus fotos a Google para su indexación.</p>
+          <div class="row" style="gap:10px;margin-bottom:12px">
+            <button class="btn btn-secondary btn-sm" onclick="copySitemap()">📋 Copiar XML</button>
+            <button class="btn btn-secondary btn-sm" onclick="toggleSitemapXml(this)">👁 Ver XML</button>
+          </div>
+          <div id="sitemapPreview" style="display:none;background:var(--bg3);border-radius:8px;padding:16px;overflow-x:auto">
+            <pre style="margin:0;font-size:11px;white-space:pre;color:var(--fg2);font-family:monospace" id="sitemapCode">Genera el sitemap añadiendo fotos y pulsando Publicar.</pre>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="tab-content" id="tab-console">
+        <div class="card">
+          <div class="card-title">🔍 Google Search Console</div>
+          <div id="consoleLinks"></div>
+        </div>
+        <div class="card mt-4">
+          <div class="card-title">📋 Guía para Google Search Console</div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="alert alert-info"><span>ℹ️</span><div><strong>Paso 1:</strong> Verifica tu dominio en Google Search Console añadiendo el código de verificación HTML a la raíz del repositorio.</div></div>
+            <div class="alert alert-info"><span>ℹ️</span><div><strong>Paso 2:</strong> Ve a "Sitemaps" en la barra lateral y envía <code>sitemap.xml</code>.</div></div>
+            <div class="alert alert-info"><span>ℹ️</span><div><strong>Paso 3:</strong> Usa "Inspección de URL" para solicitar indexación individual de cada foto si quieres acelerar el proceso.</div></div>
+            <div class="alert alert-warning"><span>⏳</span><div>Google puede tardar <strong>días o semanas</strong> en indexar páginas nuevas. Los sitemaps aceleran el proceso pero no lo garantizan.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONFIG -->
+    <div class="page" id="page-config">
+      <div class="page-header">
+        <h1 class="page-title">Ajustes</h1>
+        <p class="page-desc">Configura tu cuenta de GitHub Pages para publicar las fotos</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🐙 GitHub Pages</div>
+
+        <div class="alert alert-info" style="margin-bottom:20px">
+          <span>ℹ️</span>
+          <div>
+            <strong>Cómo obtener un token de GitHub:</strong>
+            Ve a <strong>GitHub → Settings → Developer settings → Personal access tokens (clásico)</strong> y crea uno con permisos <code>repo</code>.
+            <a href="https://github.com/settings/tokens/new?scopes=repo&description=FotoSEO" target="_blank" style="color:var(--accent)">Crear token →</a>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="cfgToken">Token de GitHub <span>(se guarda solo en tu navegador)</span></label>
+          <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxx">
+        </div>
+        <div class="row" style="gap:16px">
+          <div class="field" style="flex:1;min-width:0">
+            <label class="label" for="cfgOwner">Usuario/organización de GitHub</label>
+            <input type="text" id="cfgOwner" placeholder="tu-usuario">
+          </div>
+          <div class="field" style="flex:1;min-width:0">
+            <label class="label" for="cfgRepo">Nombre del repositorio</label>
+            <input type="text" id="cfgRepo" placeholder="mis-fotos-seo">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label" for="cfgBranch">Rama de GitHub Pages</label>
+          <select id="cfgBranch">
+            <option value="main">main</option>
+            <option value="gh-pages">gh-pages</option>
+            <option value="master">master</option>
+          </select>
+          <div class="hint">Asegúrate de que GitHub Pages esté activado en este repositorio (Settings → Pages → Source).</div>
+        </div>
+
+        <div class="row mt-4">
+          <button class="btn btn-secondary" onclick="testConnection()" id="testBtn">🔌 Probar conexión</button>
+          <button class="btn btn-primary" onclick="saveConfig()">💾 Guardar ajustes</button>
+        </div>
+        <div id="configResult" style="margin-top:12px"></div>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-title">🗑️ Gestión de datos</div>
+        <p class="text-sm text-muted" style="margin-bottom:16px">Todos los datos se guardan localmente en tu navegador.</p>
+        <div class="row">
+          <button class="btn btn-danger btn-sm" onclick="exportData()">📤 Exportar datos</button>
+          <button class="btn btn-danger btn-sm" onclick="clearAllData()">🗑️ Borrar todo</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+// ===================== STATE =====================
+let STATE = {
+  photos: [],
+  config: {
+    githubToken: '',
+    githubOwner: 'suharpollo-web',
+    githubRepo: 'fotoseo',
+    githubBranch: 'main',
+    setupDone: true
+  },
+  currentFile: null,
+  currentFileData: null
+};
+
+const AUTHOR_NAME = 'Las ideas de Suhar';
+const AUTHOR_URL = 'https://www.youtube.com/@IdeasDeSuhar';
+const LICENSE_URL = 'https://creativecommons.org/licenses/by/4.0/';
+
+// ===================== INIT =====================
+function init() {
+  loadState();
+  renderDashboard();
+  renderGallery();
+  renderDeploy();
+  renderSeo();
+  loadConfig();
+  updateSeoPreview();
+
+  // Drag & drop
+  const dz = document.getElementById('dropZone');
+  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragging'); });
+  dz.addEventListener('dragleave', () => dz.classList.remove('dragging'));
+  dz.addEventListener('drop', e => {
+    e.preventDefault();
+    dz.classList.remove('dragging');
+    const f = e.dataTransfer.files[0];
+    if (f) handleFile(f);
+  });
+
+  // Desc counter
+  document.getElementById('photoDesc').addEventListener('input', function() {
+    const len = this.value.length;
+    const hint = document.getElementById('descHint');
+    hint.textContent = `${len} / 160 caracteres recomendados`;
+    hint.style.color = len > 160 ? 'var(--warning)' : '';
+  });
+}
+
+function loadState() {
+  try {
+    const s = localStorage.getItem('fotoseo_v1');
+    if (s) Object.assign(STATE, JSON.parse(s));
+  } catch(e) {}
+}
+
+function saveState() {
+  try {
+    // Don't store full base64 images, only thumbnails
+    const toSave = { ...STATE, currentFile: null, currentFileData: null };
+    localStorage.setItem('fotoseo_v1', JSON.stringify(toSave));
+  } catch(e) {
+    toast('Almacenamiento lleno. Algunos datos pueden no guardarse.', 'err');
+  }
+}
+
+// ===================== NAVIGATION =====================
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.mobile-nav-btn').forEach(n => n.classList.remove('active'));
+  const ni = document.getElementById('nav-' + id);
+  if (ni) ni.classList.add('active');
+  const mn = document.getElementById('mnav-' + id);
+  if (mn) mn.classList.add('active');
+
+  if (id === 'deploy') renderDeploy();
+  if (id === 'seo') renderSeo();
+  if (id === 'gallery') renderGallery();
+  if (id === 'dashboard') renderDashboard();
+}
+
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// ===================== THEME =====================
+function setTheme(t) {
+  document.querySelectorAll('.toggle-btn button').forEach(b => b.classList.remove('active'));
+  document.getElementById('theme-' + t).classList.add('active');
+  if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+  else if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  else document.documentElement.removeAttribute('data-theme');
+  try { localStorage.setItem('fotoseo_theme', t); } catch(e) {}
+}
+
+// ===================== FILE HANDLING =====================
+function handleFileSelect(input) {
+  if (input.files[0]) handleFile(input.files[0]);
+}
+
+function handleFile(file) {
+  if (!file.type.startsWith('image/')) { toast('Selecciona un archivo de imagen válido', 'err'); return; }
+  if (file.size > 20 * 1024 * 1024) { toast('La imagen es demasiado grande (máx. 20 MB)', 'err'); return; }
+
+  STATE.currentFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('imgPreview').src = e.target.result;
+    document.getElementById('imgPreviewWrap').style.display = '';
+    document.getElementById('imgInfo').textContent = `${file.name} · ${(file.size/1024/1024).toFixed(2)} MB`;
+    document.getElementById('uploadStep2').style.display = '';
+
+    // Auto-fill title from filename
+    const base = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+    if (!document.getElementById('photoTitle').value) {
+      document.getElementById('photoTitle').value = base.charAt(0).toUpperCase() + base.slice(1);
+      updateSeoPreview();
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearFile() {
+  STATE.currentFile = null;
+  STATE.currentFileData = null;
+  document.getElementById('imgPreviewWrap').style.display = 'none';
+  document.getElementById('uploadStep2').style.display = 'none';
+  document.getElementById('fileInput').value = '';
+}
+
+function goBackToStep1() {
+  document.getElementById('uploadStep2').style.display = 'none';
+  clearFile();
+}
+
+// ===================== IMAGE COMPRESSION =====================
+function compressImage(file, maxWidth = 2000, quality = 0.88) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let { width, height } = img;
+        if (width > maxWidth) { height = Math.round(height * maxWidth / width); width = maxWidth; }
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        canvas.toBlob(blob => {
+          const r = new FileReader();
+          r.onload = e2 => resolve(e2.target.result.split(',')[1]); // base64 only
+          r.readAsDataURL(blob);
+        }, 'image/jpeg', quality);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function makeThumbnail(file) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const size = 400;
+        let sw = img.width, sh = img.height, sx = 0, sy = 0;
+        if (sw / sh > 1) { sx = (sw - sh) / 2; sw = sh; }
+        else { sy = (sh - sw) / 2; sh = sw; }
+        canvas.width = size; canvas.height = size;
+        canvas.getContext('2d').drawImage(img, sx, sy, sw, sh, 0, 0, size, size);
+        resolve(canvas.toDataURL('image/jpeg', 0.7));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// ===================== SAVE PHOTO =====================
+async function savePhoto() {
+  const title = document.getElementById('photoTitle').value.trim();
+  const desc = document.getElementById('photoDesc').value.trim();
+  const alt = document.getElementById('photoAlt').value.trim();
+  const tags = document.getElementById('photoTags').value.split(',').map(t => t.trim()).filter(Boolean);
+  const cat = document.getElementById('photoCategory').value;
+
+  if (!STATE.currentFile) { toast('Selecciona una imagen primero', 'err'); return; }
+  if (!title) { toast('El título es obligatorio', 'err'); return; }
+
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Procesando…';
+
+  try {
+    const thumb = await makeThumbnail(STATE.currentFile);
+    const slug = slugify(title);
+    const ext = STATE.currentFile.type === 'image/png' ? 'png' : 'jpg';
+    const fname = `${slug}-${Date.now()}.${ext}`;
+
+    const photo = {
+      id: Date.now().toString(),
+      title,
+      desc,
+      alt: alt || title,
+      tags,
+      category: cat,
+      slug,
+      fname,
+      thumb,
+      mimeType: STATE.currentFile.type,
+      size: STATE.currentFile.size,
+      date: new Date().toISOString(),
+      deployed: false
+    };
+
+    // Store original file data temporarily for deployment
+    STATE.currentFileData = STATE.currentFile;
+    STATE._pendingFile = { id: photo.id, file: STATE.currentFile };
+
+    STATE.photos.unshift(photo);
+    saveState();
+
+    toast('✅ Foto guardada. ¡Ahora publícala para que aparezca en Google!', 'ok');
+
+    // Reset form
+    clearFile();
+    document.getElementById('photoTitle').value = '';
+    document.getElementById('photoDesc').value = '';
+    document.getElementById('photoAlt').value = '';
+    document.getElementById('photoTags').value = '';
+    document.getElementById('photoCategory').value = '';
+    updateSeoPreview();
+
+    renderGallery();
+    renderDashboard();
+  } catch(e) {
+    toast('Error al procesar la imagen: ' + e.message, 'err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '💾 Guardar foto';
+  }
+}
+
+// ===================== SEO PREVIEW =====================
+function updateSeoPreview() {
+  const title = document.getElementById('photoTitle').value || 'Título de la foto';
+  const desc = document.getElementById('photoDesc').value || 'La descripción aparecerá aquí en los resultados de búsqueda de Google...';
+  const slug = slugify(title) || 'tu-foto';
+  const { githubOwner, githubRepo } = STATE.config;
+  const base = githubOwner && githubRepo
+    ? `https://${githubOwner}.github.io/${githubRepo}`
+    : 'https://tusite.github.io/fotos';
+
+  document.getElementById('prevUrl').textContent = `${base}/fotos/${slug}/`;
+  document.getElementById('prevTitle').textContent = title + ' | ' + AUTHOR_NAME;
+  document.getElementById('prevDesc').textContent = desc.length > 160 ? desc.substring(0, 157) + '…' : desc;
+}
+
+// ===================== DASHBOARD =====================
+function renderDashboard() {
+  const total = STATE.photos.length;
+  const deployed = STATE.photos.filter(p => p.deployed).length;
+  const { githubOwner, githubRepo } = STATE.config;
+
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">Fotos guardadas</div></div>
+    <div class="stat-card"><div class="stat-num">${deployed}</div><div class="stat-label">Publicadas en web</div></div>
+    <div class="stat-card"><div class="stat-num">${total - deployed}</div><div class="stat-label">Pendientes</div></div>
+  `;
+
+  const configured = githubOwner && githubRepo && STATE.config.githubToken;
+  document.getElementById('quickstart').innerHTML = configured ? `
+    <div class="alert alert-success">
+      <span>✅</span>
+      <div>GitHub Pages configurado: <strong>${githubOwner}/${githubRepo}</strong>.
+      <a href="https://${githubOwner}.github.io/${githubRepo}" target="_blank" style="color:inherit;text-decoration:underline">Ver sitio →</a></div>
+    </div>
+    ${total === 0 ? `<button class="btn btn-primary" onclick="showPage('upload')">📤 Sube tu primera foto</button>` :
+      deployed < total ? `<button class="btn btn-primary" onclick="showPage('deploy')">🌐 Publicar ${total - deployed} foto(s) pendiente(s)</button>` :
+      `<div class="text-sm text-muted">Todo publicado. ✨</div>`}
+  ` : `
+    <div class="alert alert-warning"><span>⚙️</span><div>Configura GitHub Pages para publicar las fotos en la web y que Google las indexe.</div></div>
+    <button class="btn btn-primary" onclick="showPage('config')">Configurar ahora →</button>
+  `;
+
+  const recentCard = document.getElementById('recentPhotosCard');
+  if (STATE.photos.length > 0) {
+    recentCard.style.display = '';
+    const recent = STATE.photos.slice(0, 6);
+    document.getElementById('recentPhotosGrid').innerHTML = recent.map(p => photoCardHTML(p)).join('');
+  } else {
+    recentCard.style.display = 'none';
+  }
+}
+
+// ===================== GALLERY =====================
+function renderGallery() {
+  const grid = document.getElementById('galleryGrid');
+  const empty = document.getElementById('galleryEmpty');
+  if (STATE.photos.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = '';
+  } else {
+    empty.style.display = 'none';
+    grid.innerHTML = STATE.photos.map(p => photoCardHTML(p)).join('');
+  }
+}
+
+function photoCardHTML(p) {
+  return `<div class="photo-card" onclick="viewPhoto('${p.id}')">
+    <img src="${p.thumb}" alt="${escHtml(p.alt)}" loading="lazy">
+    <div class="photo-card-info">
+      <div class="photo-card-title">${escHtml(p.title)}</div>
+      <div class="photo-card-desc">${escHtml(p.desc)}</div>
+      <div style="margin-top:6px">${p.deployed ? '<span class="badge badge-green">✅ Publicada</span>' : '<span class="badge badge-warn">⏳ Pendiente</span>'}</div>
+    </div>
+    <div class="photo-card-actions" onclick="event.stopPropagation()">
+      <button class="btn btn-secondary btn-sm" onclick="viewPhoto('${p.id}')">Ver</button>
+      <button class="btn btn-danger btn-sm" onclick="deletePhoto('${p.id}')">🗑️</button>
+    </div>
+  </div>`;
+}
+
+function viewPhoto(id) {
+  const p = STATE.photos.find(x => x.id === id);
+  if (!p) return;
+  const { githubOwner, githubRepo } = STATE.config;
+  const base = githubOwner && githubRepo ? `https://${githubOwner}.github.io/${githubRepo}` : 'https://tusite.github.io/fotos';
+  const pageUrl = `${base}/fotos/${p.slug}/`;
+  const imgUrl = `${base}/fotos/${p.fname}`;
+
+  document.getElementById('modalTitle').textContent = p.title;
+  document.getElementById('modalContent').innerHTML = `
+    <img src="${p.thumb}" style="width:100%;border-radius:8px;margin-bottom:16px;object-fit:cover;max-height:220px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px" class="text-sm">
+      <div><span class="text-muted">Categoría:</span> ${p.category || '—'}</div>
+      <div><span class="text-muted">Fecha:</span> ${new Date(p.date).toLocaleDateString('es-ES')}</div>
+      <div style="grid-column:span 2"><span class="text-muted">Etiquetas:</span> ${p.tags.length ? p.tags.map(t => `<span class="badge badge-blue">${t}</span>`).join(' ') : '—'}</div>
+    </div>
+    ${p.desc ? `<p class="text-sm" style="margin-bottom:12px"><strong>Descripción:</strong> ${escHtml(p.desc)}</p>` : ''}
+    <div style="margin-bottom:16px">
+      <div class="text-sm text-muted" style="margin-bottom:4px">URL de la página:</div>
+      <code style="word-break:break-all">${pageUrl}</code>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      ${p.deployed ? `<a href="${pageUrl}" target="_blank" class="btn btn-primary btn-sm">🔗 Ver en la web</a>` : ''}
+      <span class="${p.deployed ? 'badge badge-green' : 'badge badge-warn'}">${p.deployed ? '✅ Publicada' : '⏳ Pendiente'}</span>
+    </div>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+      <div class="cc-badge" style="font-size:11px"><span>🌐</span> Creative Commons BY 4.0 · ${AUTHOR_NAME}</div>
+    </div>
+  `;
+  document.getElementById('photoModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('photoModal').classList.remove('open');
+}
+
+function deletePhoto(id) {
+  if (!confirm('¿Eliminar esta foto?')) return;
+  STATE.photos = STATE.photos.filter(p => p.id !== id);
+  saveState();
+  closeModal();
+  renderGallery();
+  renderDashboard();
+  toast('Foto eliminada', 'ok');
+}
+
+// ===================== GITHUB API =====================
+async function githubRequest(method, path, data) {
+  const { githubToken } = STATE.config;
+  const url = `https://api.github.com${path}`;
+  const res = await fetch(url, {
+    method,
+    headers: {
+      'Authorization': `token ${githubToken}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/vnd.github.v3+json'
+    },
+    body: data ? JSON.stringify(data) : undefined
+  });
+  if (!res.ok && res.status !== 404) throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
+  return res.json();
+}
+
+async function getFileSHA(path) {
+  const { githubOwner: o, githubRepo: r, githubBranch: b } = STATE.config;
+  try {
+    const res = await githubRequest('GET', `/repos/${o}/${r}/contents/${path}?ref=${b}`);
+    return res.sha || null;
+  } catch { return null; }
+}
+
+async function pushFile(filePath, content, message, isBinary = false) {
+  const { githubOwner: o, githubRepo: r, githubBranch: b } = STATE.config;
+  const sha = await getFileSHA(filePath);
+  const encoded = isBinary ? content : btoa(unescape(encodeURIComponent(content)));
+  const data = { message, content: encoded, branch: b, ...(sha ? { sha } : {}) };
+  return githubRequest('PUT', `/repos/${o}/${r}/contents/${filePath}`, data);
+}
+
+// ===================== PAGE GENERATION =====================
+function generatePhotoPage(photo, imageUrl, pageUrl, siteUrl) {
+  const schemaObj = {
+    "@context": "https://schema.org",
+    "@type": "ImageObject",
+    "name": photo.title,
+    "contentUrl": imageUrl,
+    "url": pageUrl,
+    "description": photo.desc,
+    "author": {
+      "@type": "Person",
+      "name": AUTHOR_NAME,
+      "url": AUTHOR_URL,
+      "sameAs": [AUTHOR_URL]
+    },
+    "license": LICENSE_URL,
+    "acquireLicensePage": LICENSE_URL,
+    "creditText": `${AUTHOR_NAME} — CC BY 4.0`,
+    "keywords": photo.tags.join(', '),
+    "datePublished": photo.date,
+    "encodingFormat": photo.mimeType
+  };
+
+  const tags = photo.tags.map(t => `<a href="${siteUrl}/buscar?q=${encodeURIComponent(t)}" rel="tag" style="display:inline-block;padding:3px 10px;margin:2px;background:#f3f4f6;border-radius:20px;font-size:13px;color:#374151;text-decoration:none">${escHtml(t)}</a>`).join('');
+
+  return `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${escHtml(photo.title)} | ${AUTHOR_NAME}</title>
+<meta name="description" content="${escHtml(photo.desc || photo.title)}">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="canonical" href="${pageUrl}">
+<link rel="license" href="${LICENSE_URL}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="${escHtml(photo.title)}">
+<meta property="og:description" content="${escHtml(photo.desc || photo.title)}">
+<meta property="og:image" content="${imageUrl}">
+<meta property="og:image:alt" content="${escHtml(photo.alt || photo.title)}">
+<meta property="og:url" content="${pageUrl}">
+<meta property="og:site_name" content="${AUTHOR_NAME}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escHtml(photo.title)}">
+<meta name="twitter:description" content="${escHtml(photo.desc || photo.title)}">
+<meta name="twitter:image" content="${imageUrl}">
+${photo.tags.length ? `<meta name="keywords" content="${escHtml(photo.tags.join(', '))}">` : ''}
+<script type="application/ld+json">${JSON.stringify(schemaObj, null, 2)}</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#fff;color:#111;line-height:1.6}
+header{background:#111;color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+.site-name{font-weight:700;font-size:17px}
+.site-link{color:#93c5fd;text-decoration:none;font-size:14px}
+.photo-wrap{max-width:1000px;margin:0 auto;padding:24px 20px}
+.main-img{width:100%;border-radius:8px;display:block;margin-bottom:24px}
+h1{font-size:clamp(20px,4vw,32px);font-weight:700;margin-bottom:12px;line-height:1.2}
+.desc{font-size:16px;color:#374151;margin-bottom:20px;line-height:1.7}
+.meta{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:#6b7280;margin-bottom:20px;padding:16px;background:#f9fafb;border-radius:8px}
+.cc{display:flex;align-items:center;gap:8px;padding:12px 16px;background:#eff6ff;border-radius:8px;font-size:13px;border:1px solid #bfdbfe}
+.cc a{color:#1d4ed8}
+footer{background:#f9fafb;border-top:1px solid #e5e7eb;padding:20px;text-align:center;font-size:13px;color:#6b7280;margin-top:40px}
+footer a{color:#374151}
+</style>
+</head>
+<body>
+<header>
+  <span class="site-name">📸 ${AUTHOR_NAME}</span>
+  <a class="site-link" href="${AUTHOR_URL}" target="_blank" rel="noopener">Canal de YouTube →</a>
+</header>
+<div class="photo-wrap">
+  <img class="main-img" src="${imageUrl}" alt="${escHtml(photo.alt || photo.title)}" itemprop="image">
+  <h1>${escHtml(photo.title)}</h1>
+  ${photo.desc ? `<p class="desc">${escHtml(photo.desc)}</p>` : ''}
+  <div class="meta">
+    <span>📅 ${new Date(photo.date).toLocaleDateString('es-ES', {year:'numeric',month:'long',day:'numeric'})}</span>
+    ${photo.category ? `<span>🏷️ ${escHtml(photo.category)}</span>` : ''}
+  </div>
+  ${tags ? `<div style="margin-bottom:20px">${tags}</div>` : ''}
+  <div class="cc">
+    <span>🌐</span>
+    <div>
+      Esta imagen está bajo licencia
+      <a href="${LICENSE_URL}" target="_blank" rel="license">Creative Commons BY 4.0</a>.
+      Puedes usarla libremente citando al autor:
+      <strong><a href="${AUTHOR_URL}" target="_blank">${AUTHOR_NAME}</a></strong>.
+    </div>
+  </div>
+</div>
+<footer>
+  <div>Fotografía de <a href="${AUTHOR_URL}" target="_blank">${AUTHOR_NAME}</a></div>
+  <div style="margin-top:4px">Licencia: <a href="${LICENSE_URL}" target="_blank" rel="license">Creative Commons Attribution 4.0</a></div>
+</footer>
+</body>
+</html>`;
+}
+
+function generateIndex(photos, siteUrl) {
+  const photoCards = photos.map(p => {
+    const imgUrl = `${siteUrl}/fotos/${p.fname}`;
+    const pageUrl = `${siteUrl}/fotos/${p.slug}/`;
+    return `<a href="${pageUrl}" style="display:block;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;text-decoration:none;color:inherit;transition:transform .2s,box-shadow .2s" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 20px rgba(0,0,0,.12)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <img src="${imgUrl}" alt="${escHtml(p.alt || p.title)}" style="width:100%;height:200px;object-fit:cover;display:block" loading="lazy">
+      <div style="padding:14px">
+        <div style="font-weight:600;font-size:15px;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(p.title)}</div>
+        ${p.desc ? `<div style="font-size:13px;color:#6b7280;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escHtml(p.desc)}</div>` : ''}
+      </div>
+    </a>`;
+  }).join('\n');
+
+  return `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Galería de Fotos | ${AUTHOR_NAME}</title>
+<meta name="description" content="Galería de fotografías de ${AUTHOR_NAME}. Imágenes bajo licencia Creative Commons BY 4.0.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="${siteUrl}/">
+<link rel="sitemap" href="${siteUrl}/sitemap.xml" type="application/xml">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#f8f9fa;color:#111}
+header{background:#111;color:#fff;padding:24px 20px;text-align:center}
+h1{font-size:clamp(22px,5vw,36px);font-weight:700;margin-bottom:8px}
+.subtitle{color:#9ca3af;font-size:15px}
+.gallery{max-width:1200px;margin:0 auto;padding:32px 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+footer{background:#f9fafb;border-top:1px solid #e5e7eb;padding:20px;text-align:center;font-size:13px;color:#6b7280;margin-top:20px}
+footer a{color:#374151}
+</style>
+</head>
+<body>
+<header>
+  <h1>📸 Galería de Fotos</h1>
+  <p class="subtitle">${AUTHOR_NAME} · Creative Commons BY 4.0 · <a href="${AUTHOR_URL}" style="color:#93c5fd" target="_blank">Canal de YouTube</a></p>
+</header>
+<div class="gallery">
+${photoCards}
+</div>
+<footer>
+  <div>Fotografías de <a href="${AUTHOR_URL}" target="_blank">${AUTHOR_NAME}</a></div>
+  <div style="margin-top:4px">Licencia: <a href="${LICENSE_URL}" target="_blank">Creative Commons Attribution 4.0 International</a></div>
+</footer>
+</body>
+</html>`;
+}
+
+function generateSitemap(photos, siteUrl) {
+  const urls = photos.map(p => {
+    const imgUrl = `${siteUrl}/fotos/${p.fname}`;
+    const pageUrl = `${siteUrl}/fotos/${p.slug}/`;
+    return `  <url>
+    <loc>${pageUrl}</loc>
+    <lastmod>${p.date.substring(0,10)}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>${imgUrl}</image:loc>
+      <image:caption>${escXml(p.title)}</image:caption>
+      <image:title>${escXml(p.title)}</image:title>
+      <image:license>${LICENSE_URL}</image:license>
+    </image:image>
+  </url>`;
+  }).join('\n');
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>${siteUrl}/</loc>
+    <lastmod>${new Date().toISOString().substring(0,10)}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+${urls}
+</urlset>`;
+}
+
+function generateRobots(siteUrl) {
+  return `User-agent: *
+Allow: /
+
+Sitemap: ${siteUrl}/sitemap.xml`;
+}
+
+// ===================== DEPLOY =====================
+function renderDeploy() {
+  const { githubToken, githubOwner, githubRepo } = STATE.config;
+  const configured = githubToken && githubOwner && githubRepo;
+  document.getElementById('deployNoConfig').style.display = configured ? 'none' : '';
+  document.getElementById('deployMain').style.display = configured ? '' : 'none';
+  if (configured) {
+    document.getElementById('photosCount').textContent = STATE.photos.length;
+    const files = generateFileList();
+    document.getElementById('generatedFilesList').innerHTML = files.length
+      ? `<div style="font-family:monospace;font-size:12px;line-height:2">${files.map(f => `<div>📄 ${f}</div>`).join('')}</div>`
+      : '<div class="text-muted">Sin fotos aún.</div>';
+  }
+}
+
+function generateFileList() {
+  if (!STATE.photos.length) return [];
+  const files = ['index.html', 'sitemap.xml', 'robots.txt'];
+  STATE.photos.forEach(p => {
+    files.push(`fotos/${p.fname}`);
+    files.push(`fotos/${p.slug}/index.html`);
+  });
+  return files;
+}
+
+async function deployAll() {
+  const { githubOwner: o, githubRepo: r, githubBranch: b } = STATE.config;
+  if (!STATE.photos.length) { toast('No hay fotos para publicar', 'err'); return; }
+
+  const btn = document.getElementById('deployBtn');
+  const progWrap = document.getElementById('deployProgress');
+  const progBar = document.getElementById('deployProgressBar');
+  const progText = document.getElementById('deployProgressText');
+  const statusDiv = document.getElementById('deployStatus');
+
+  btn.disabled = true;
+  document.getElementById('zipBtn').disabled = true;
+  progWrap.style.display = '';
+  statusDiv.style.display = 'none';
+
+  const siteUrl = `https://${o}.github.io/${r}`;
+  const total = STATE.photos.length * 2 + 3; // image + page + index + sitemap + robots
+  let done = 0;
+
+  function progress(msg) {
+    progText.textContent = msg;
+    progBar.style.width = Math.round(done / total * 100) + '%';
+    done++;
+  }
+
+  try {
+    // We need images. If photos don't have full data stored (they're in-memory),
+    // warn the user this session's photos are from thumbnails only.
+    // We'll store compressed versions from pending file if available.
+
+    progress('Generando index.html…');
+    await pushFile('index.html', generateIndex(STATE.photos, siteUrl), '📸 FotoSEO: actualizar galería');
+
+    progress('Generando sitemap.xml…');
+    await pushFile('sitemap.xml', generateSitemap(STATE.photos, siteUrl), '🗺️ FotoSEO: actualizar sitemap');
+
+    progress('Generando robots.txt…');
+    await pushFile('robots.txt', generateRobots(siteUrl), '🤖 FotoSEO: robots.txt');
+
+    // Deploy photo pages (using stored thumbnails as placeholder images for now)
+    for (const p of STATE.photos) {
+      const imgUrl = `${siteUrl}/fotos/${p.fname}`;
+      const pageUrl = `${siteUrl}/fotos/${p.slug}/`;
+
+      progress(`Subiendo página: ${p.title}…`);
+      await pushFile(`fotos/${p.slug}/index.html`,
+        generatePhotoPage(p, imgUrl, pageUrl, siteUrl),
+        `📸 FotoSEO: ${p.title}`);
+
+      // If we have the original file data for this photo, upload the image too
+      const pending = STATE._pendingFiles && STATE._pendingFiles[p.id];
+      if (pending) {
+        progress(`Subiendo imagen: ${p.fname}…`);
+        const b64 = await compressImage(pending);
+        await pushFile(`fotos/${p.fname}`, b64, `🖼️ FotoSEO: imagen ${p.fname}`, true);
+        p.deployed = true;
+      } else if (p.deployed) {
+        progress(`Imagen ya publicada: ${p.fname}`);
+      } else {
+        // No image data — upload thumbnail as placeholder
+        progress(`Subiendo miniatura: ${p.fname}…`);
+        const thumb64 = p.thumb.split(',')[1];
+        await pushFile(`fotos/${p.fname}`, thumb64, `🖼️ FotoSEO: imagen ${p.fname}`, true);
+        p.deployed = true;
+      }
+    }
+
+    progBar.style.width = '100%';
+    progText.textContent = '✅ ¡Publicado!';
+
+    saveState();
+    renderGallery();
+    renderDashboard();
+
+    document.getElementById('deployResultCard').style.display = '';
+    document.getElementById('deployResultContent').innerHTML = `
+      <p class="text-sm" style="margin-bottom:16px">Las fotos se han publicado en GitHub Pages. Puede tardar 1-2 minutos en estar disponible.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        <a href="${siteUrl}" target="_blank" class="btn btn-primary btn-sm">🌐 Ver sitio</a>
+        <a href="${siteUrl}/sitemap.xml" target="_blank" class="btn btn-secondary btn-sm">🗺️ Ver sitemap</a>
+        <a href="https://search.google.com/search-console/sitemaps?resource_id=sc-domain:${o}.github.io" target="_blank" class="btn btn-secondary btn-sm">🔍 Search Console</a>
+      </div>
+      <div class="alert alert-info" style="margin-top:16px">
+        <span>ℹ️</span><div>Envía el sitemap a Google Search Console para acelerar la indexación: <code>${siteUrl}/sitemap.xml</code></div>
+      </div>
+    `;
+    toast('✅ ¡Publicado correctamente!', 'ok');
+
+  } catch(e) {
+    progText.textContent = 'Error: ' + e.message;
+    statusDiv.className = 'alert alert-error';
+    statusDiv.innerHTML = `<span>❌</span><div>${e.message}</div>`;
+    statusDiv.style.display = '';
+    toast('Error al publicar: ' + e.message, 'err');
+  } finally {
+    btn.disabled = false;
+    document.getElementById('zipBtn').disabled = false;
+  }
+}
+
+async function downloadZip() {
+  if (!STATE.photos.length) { toast('No hay fotos para exportar', 'err'); return; }
+  if (typeof JSZip === 'undefined') { toast('JSZip no disponible', 'err'); return; }
+
+  const btn = document.getElementById('zipBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Generando ZIP…';
+
+  const { githubOwner: o, githubRepo: r } = STATE.config;
+  const siteUrl = o && r ? `https://${o}.github.io/${r}` : 'https://tusite.github.io/fotos';
+
+  try {
+    const zip = new JSZip();
+    zip.file('index.html', generateIndex(STATE.photos, siteUrl));
+    zip.file('sitemap.xml', generateSitemap(STATE.photos, siteUrl));
+    zip.file('robots.txt', generateRobots(siteUrl));
+
+    for (const p of STATE.photos) {
+      const imgUrl = `${siteUrl}/fotos/${p.fname}`;
+      const pageUrl = `${siteUrl}/fotos/${p.slug}/`;
+      zip.file(`fotos/${p.slug}/index.html`, generatePhotoPage(p, imgUrl, pageUrl, siteUrl));
+      // Add thumbnail as image placeholder
+      const thumb64 = p.thumb.split(',')[1];
+      zip.file(`fotos/${p.fname}`, thumb64, { base64: true });
+    }
+
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'fotoseo-sitio.zip';
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('✅ ZIP descargado. Súbelo a Netlify Drop o Cloudflare Pages.', 'ok');
+  } catch(e) {
+    toast('Error al generar ZIP: ' + e.message, 'err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '📦 Descargar ZIP';
+  }
+}
+
+// ===================== SEO PAGE =====================
+function renderSeo() {
+  renderSeoChecklist();
+  renderSitemapPreview();
+  renderConsoleLinks();
+}
+
+function renderSeoChecklist() {
+  const { githubOwner: o, githubRepo: r, githubToken: t } = STATE.config;
+  const photos = STATE.photos;
+  const withDesc = photos.filter(p => p.desc && p.desc.length > 50).length;
+  const withTags = photos.filter(p => p.tags.length > 0).length;
+  const deployed = photos.filter(p => p.deployed).length;
+
+  const checks = [
+    { ok: !!(o && r && t), label: 'GitHub Pages configurado', detail: 'Ajusta token, usuario y repositorio en Ajustes.' },
+    { ok: photos.length > 0, label: 'Al menos una foto subida', detail: 'Sube fotos desde la sección "Subir foto".' },
+    { ok: photos.length === 0 || withDesc === photos.length, label: 'Todas las fotos tienen descripción (+50 caracteres)', detail: `${photos.length - withDesc} foto(s) sin descripción adecuada.` },
+    { ok: photos.length === 0 || withTags === photos.length, label: 'Todas las fotos tienen etiquetas', detail: `${photos.length - withTags} foto(s) sin etiquetas.` },
+    { ok: deployed > 0, label: 'Al menos una foto publicada en web', detail: 'Publica desde la sección "Publicar en web".' },
+    { ok: deployed === photos.length && photos.length > 0, label: 'Todas las fotos publicadas', detail: `${photos.length - deployed} foto(s) pendientes de publicar.` },
+  ];
+
+  const score = checks.filter(c => c.ok).length;
+  document.getElementById('seoChecklist').innerHTML = `
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">Puntuación SEO</div>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:700;color:${score >= 5 ? 'var(--success)' : score >= 3 ? 'var(--warning)' : 'var(--error)'}">
+          ${score}/${checks.length}
+        </div>
+        <div>
+          <div style="font-weight:600">${score >= 5 ? '¡Excelente!' : score >= 3 ? 'Mejorable' : 'Necesita atención'}</div>
+          <div class="text-sm text-muted">Completa los puntos pendientes</div>
+        </div>
+      </div>
+      <div class="progress-wrap" style="margin-bottom:16px"><div class="progress-bar" style="width:${Math.round(score/checks.length*100)}%;background:${score >= 5 ? 'var(--success)' : score >= 3 ? 'var(--warning)' : 'var(--error)'}"></div></div>
+      ${checks.map(c => `
+        <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
+          <span style="font-size:16px;flex-shrink:0;margin-top:1px">${c.ok ? '✅' : '❌'}</span>
+          <div>
+            <div style="font-size:14px;font-weight:${c.ok ? '400' : '500'}">${c.label}</div>
+            ${!c.ok ? `<div class="text-xs text-muted" style="margin-top:2px">${c.detail}</div>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="card">
+      <div class="card-title">💡 Consejos para Google Imágenes</div>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:14px">
+        <div>📝 <strong>Texto alternativo descriptivo</strong>: Describe literalmente qué se ve en la foto.</div>
+        <div>🔑 <strong>Título con palabras clave</strong>: "Volcán Arenal al amanecer Costa Rica" > "foto1".</div>
+        <div>📄 <strong>Descripción larga y rica</strong>: 100-160 caracteres con contexto y ubicación.</div>
+        <div>🏷️ <strong>Etiquetas relevantes</strong>: Usa términos que la gente busca, no solo nombres.</div>
+        <div>⚡ <strong>Imágenes grandes y de calidad</strong>: Google prefiere imágenes ≥ 1200px de ancho.</div>
+        <div>🔗 <strong>URLs descriptivas</strong>: La app las genera automáticamente del título.</div>
+        <div>🗺️ <strong>Envía el sitemap</strong>: Google Search Console → Sitemaps para indexación más rápida.</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderSitemapPreview() {
+  const { githubOwner: o, githubRepo: r } = STATE.config;
+  if (!STATE.photos.length) return;
+  const siteUrl = o && r ? `https://${o}.github.io/${r}` : 'https://tusite.github.io/fotos';
+  document.getElementById('sitemapCode').textContent = generateSitemap(STATE.photos, siteUrl);
+}
+
+function renderConsoleLinks() {
+  const { githubOwner: o, githubRepo: r } = STATE.config;
+  const siteUrl = o && r ? `https://${o}.github.io/${r}` : null;
+
+  if (!siteUrl) {
+    document.getElementById('consoleLinks').innerHTML = '<div class="alert alert-warning"><span>⚠️</span><div>Configura GitHub Pages primero para ver los enlaces.</div></div>';
+    return;
+  }
+
+  const photos = STATE.photos.slice(0, 5);
+  document.getElementById('consoleLinks').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <a href="https://search.google.com/search-console/sitemaps" target="_blank" class="btn btn-primary btn-sm" style="display:inline-flex;width:fit-content">
+        🗺️ Enviar sitemap a Google
+      </a>
+      <div class="text-sm text-muted" style="margin-bottom:4px">Sitemap URL: <code>${siteUrl}/sitemap.xml</code></div>
+      ${photos.length ? `
+        <div class="card-title" style="margin-top:8px">🔍 Inspección de URLs individuales</div>
+        ${photos.map(p => {
+          const pageUrl = `${siteUrl}/fotos/${p.slug}/`;
+          const inspectUrl = `https://search.google.com/search-console/inspect?resource_id=${encodeURIComponent(siteUrl + '/')}&url=${encodeURIComponent(pageUrl)}`;
+          return `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <span class="text-sm" style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(p.title)}</span>
+            <a href="${inspectUrl}" target="_blank" class="btn btn-secondary btn-sm">Inspeccionar</a>
+          </div>`;
+        }).join('')}
+      ` : ''}
+    </div>
+  `;
+}
+
+function copySitemap() {
+  const code = document.getElementById('sitemapCode').textContent;
+  try {
+    navigator.clipboard.writeText(code).then(() => toast('Sitemap copiado', 'ok'));
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = code;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast('Sitemap copiado', 'ok');
+  }
+}
+
+// ===================== CONFIG =====================
+function loadConfig() {
+  const { githubToken, githubOwner, githubRepo, githubBranch } = STATE.config;
+  document.getElementById('cfgToken').value = githubToken || '';
+  document.getElementById('cfgOwner').value = githubOwner || '';
+  document.getElementById('cfgRepo').value = githubRepo || '';
+  document.getElementById('cfgBranch').value = githubBranch || 'main';
+  updateSeoPreview();
+}
+
+function saveConfig() {
+  STATE.config.githubToken = document.getElementById('cfgToken').value.trim();
+  STATE.config.githubOwner = document.getElementById('cfgOwner').value.trim();
+  STATE.config.githubRepo = document.getElementById('cfgRepo').value.trim();
+  STATE.config.githubBranch = document.getElementById('cfgBranch').value;
+  STATE.config.setupDone = !!(STATE.config.githubToken && STATE.config.githubOwner && STATE.config.githubRepo);
+  saveState();
+  updateSeoPreview();
+  renderDeploy();
+  renderDashboard();
+  document.getElementById('configResult').innerHTML = '<div class="alert alert-success"><span>✅</span><div>Ajustes guardados.</div></div>';
+  toast('Ajustes guardados', 'ok');
+}
+
+async function testConnection() {
+  const token = document.getElementById('cfgToken').value.trim();
+  const owner = document.getElementById('cfgOwner').value.trim();
+  const repo = document.getElementById('cfgRepo').value.trim();
+  const result = document.getElementById('configResult');
+
+  if (!token || !owner || !repo) {
+    result.innerHTML = '<div class="alert alert-warning"><span>⚠️</span><div>Rellena todos los campos primero.</div></div>';
+    return;
+  }
+
+  const btn = document.getElementById('testBtn');
+  btn.disabled = true; btn.textContent = '⏳ Probando…';
+
+  try {
+    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
+      headers: { 'Authorization': `token ${token}` }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      result.innerHTML = `<div class="alert alert-success"><span>✅</span><div>Conexión exitosa. Repositorio: <strong>${data.full_name}</strong>. GitHub Pages: ${data.has_pages ? '✅ activado' : '⚠️ no activado (actívalo en Settings → Pages)'}</div></div>`;
+    } else if (res.status === 404) {
+      result.innerHTML = '<div class="alert alert-error"><span>❌</span><div>Repositorio no encontrado. Comprueba el usuario y nombre del repo.</div></div>';
+    } else if (res.status === 401) {
+      result.innerHTML = '<div class="alert alert-error"><span>❌</span><div>Token inválido o sin permisos. Crea un nuevo token con permisos <code>repo</code>.</div></div>';
+    } else {
+      result.innerHTML = `<div class="alert alert-error"><span>❌</span><div>Error ${res.status}.</div></div>`;
+    }
+  } catch(e) {
+    result.innerHTML = `<div class="alert alert-error"><span>❌</span><div>Error de red: ${e.message}</div></div>`;
+  } finally {
+    btn.disabled = false; btn.textContent = '🔌 Probar conexión';
+  }
+}
+
+function exportData() {
+  const data = JSON.stringify({ photos: STATE.photos, config: { ...STATE.config, githubToken: '[REDACTED]' } }, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'fotoseo-backup.json';
+  a.click();
+}
+
+function clearAllData() {
+  if (!confirm('¿Borrar TODOS los datos? Esta acción no se puede deshacer.')) return;
+  STATE = { photos: [], config: { githubToken:'', githubOwner:'', githubRepo:'', githubBranch:'main', setupDone:false }, currentFile:null, currentFileData:null };
+  try { localStorage.removeItem('fotoseo_v1'); } catch(e) {}
+  renderDashboard(); renderGallery(); renderDeploy(); renderSeo(); loadConfig();
+  toast('Datos borrados', 'ok');
+}
+
+// ===================== UTILS =====================
+function slugify(str) {
+  return str.toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .substring(0, 60);
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function escXml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+}
+
+let toastTimer;
+function toast(msg, type = 'info') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `show ${type}`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+function toggleSitemapXml(btn) {
+  const el = document.getElementById('sitemapPreview');
+  const hidden = el.style.display === 'none';
+  el.style.display = hidden ? 'block' : 'none';
+  btn.textContent = hidden ? '🙈 Ocultar XML' : '👁 Ver XML';
+}
+
+// ===================== START =====================
+// Restore theme
+try {
+  const t = localStorage.getItem('fotoseo_theme');
+  if (t) setTheme(t);
+} catch(e) {}
+
+init();
+
+// Register service worker for PWA install
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/fotoseo/app/sw.js')
+      .catch(() => {}); // silent fail when running outside GitHub Pages
+  });
+}
+
+// PWA install banner
+let _deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _deferredPrompt = e;
+  const banner = document.getElementById('pwa-banner');
+  if (banner) banner.style.display = 'flex';
+});
+window.addEventListener('appinstalled', () => {
+  const banner = document.getElementById('pwa-banner');
+  if (banner) banner.style.display = 'none';
+});
+function installPwa() {
+  if (_deferredPrompt) {
+    _deferredPrompt.prompt();
+    _deferredPrompt.userChoice.then(() => { _deferredPrompt = null; });
+  }
+}
+</script>
