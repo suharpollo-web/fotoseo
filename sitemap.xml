@@ -3,7 +3,20 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://suharpollo-web.github.io/fotoseo/</loc>
+    <lastmod>2026-11-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://suharpollo-web.github.io/fotoseo/fotos/aeropuerto-de-la-palma/</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://suharpollo-web.github.io/fotoseo/fotos/aeropuerto-de-la-palma-1794388326028.jpg</image:loc>
+      <image:caption>Aeropuerto de La Palma</image:caption>
+      <image:title>Aeropuerto de La Palma</image:title>
+      <image:license>https://creativecommons.org/licenses/by/4.0/</image:license>
+    </image:image>
   </url>
 </urlset>
